@@ -28,6 +28,10 @@ def process_song_file(cur,filepath):
         df1.rename(columns=col, inplace=True)
         df1.drop(index=0, inplace=True)
 
+        # insert song record TBD
+        song_data =
+        cur.execute(song_table_insert, song_data)
+
 def main():
     get_path()
 
