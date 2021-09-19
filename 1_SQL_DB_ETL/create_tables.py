@@ -24,3 +24,4 @@ def create_database():
     cur = conn.cursor()
 
     return cur, conn
+
