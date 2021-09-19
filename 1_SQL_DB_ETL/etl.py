@@ -1,18 +1,22 @@
 import os
 import glob
+import json
 import psycopg2
 import pandas as pd
 from sql_queries import *
 
-def get_path():
-    filepath = './data'
+def get_files_in_subdirectoris(folder_path = './data'):
     all_files = []
-    for root, dirs, files in os.walk(filepath):
+    for root, dirs, files in os.walk(folder_path):
         files = glob.glob(os.path.join(root,'*.json'))
         # get absolute path of all files
-        for f in files :
+        for f in files:
             all_files.append(os.path.abspath(f))
-    print(all_files)
+    return all_files
+
+def process_song_file(cur,filepath):
+    with open(filepath, 'r') as json_file:
+        data = json.load(json_file)
 
 
 def main():
