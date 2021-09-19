@@ -33,7 +33,6 @@ def drop_tables(cur, conn):
         cur.execute(query)
         conn.commit()
 
-
 def create_tables(cur, conn):
     """
     Creates each table using the queries in `create_table_queries` list.
@@ -57,12 +56,10 @@ def main():
     """
     cur, conn = create_database()
 
-    drop_tables(cur, conn)
+    # drop_tables(cur, conn)
     create_tables(cur, conn)
 
     conn.close()
-
-create_database()
 
 if __name__ == "__main__":
     main()
