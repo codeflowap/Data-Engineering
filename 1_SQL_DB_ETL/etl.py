@@ -22,6 +22,11 @@ def process_song_file(cur,filepath):
         # convert dict to dataframe
         df = pd.DataFrame.from_dict(single_json_file.items())
 
+        # set columns of df to keys in dict
+        df1 = df.T
+        col = df1.iloc[0]
+        df1.rename(columns=col, inplace=True)
+        df1.drop(index=0, inplace=True)
 
 def main():
     get_path()
