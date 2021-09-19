@@ -16,7 +16,10 @@ def get_files_in_subdirectoris(folder_path = './data'):
 
 def process_song_file(cur,filepath):
     with open(filepath, 'r') as json_file:
-        data = json.load(json_file)
+        # load a json file (here returns a dict due to scalar values in json)
+        single_json_file = json.load(json_file)
+
+
 
 
 def main():
