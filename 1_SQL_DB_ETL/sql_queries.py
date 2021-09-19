@@ -1,10 +1,10 @@
 # DROP TABLES
 
 songplay_table_drop = "DROP TABLE songplays"
-user_table_drop = "DROP TABLE user"
-song_table_drop = "DROP TABLE song"
-artist_table_drop = "DROP TABLE artist"
-time_table_drop = "DROP TABLE time"
+user_table_drop = "DROP TABLE users"
+song_table_drop = "DROP TABLE songs"
+artist_table_drop = "DROP TABLE artists"
+time_table_drop = "DROP TABLE times"
 
 # CREATE TABLES
 
@@ -18,7 +18,7 @@ user_table_create = (""" CREATE TABLE IF NOT EXISTS users (user_id int, first_na
 song_table_create = (""" CREATE TABLE IF NOT EXISTS songs (song_id text, title text, artist_id text, year int, duration float8);
                         """)
 
-artist_table_create = (""" CREATE TABLE IF NOT EXISTS artists (artist_id text, name text, location txt, latitude float8, longitude float8);
+artist_table_create = (""" CREATE TABLE IF NOT EXISTS artists (artist_id text, name text, location text, latitude float8, longitude float8);
                         """)
 
 time_table_create = (""" CREATE TABLE IF NOT EXISTS times (start_time time, hour int, day int, week int, month int, year int, weekday int);
