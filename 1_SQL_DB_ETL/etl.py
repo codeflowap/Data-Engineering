@@ -19,7 +19,8 @@ def process_song_file(cur,filepath):
         # load a json file (here returns a dict due to scalar values in json)
         single_json_file = json.load(json_file)
 
-
+        # convert dict to dataframe
+        df = pd.DataFrame.from_dict(single_json_file.items())
 
 
 def main():
