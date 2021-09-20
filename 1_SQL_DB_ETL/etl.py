@@ -5,15 +5,6 @@ import psycopg2
 import pandas as pd
 from sql_queries import *
 
-def get_files_in_subdirectoris(folder_path = './data'):
-    all_files = []
-    for root, dirs, files in os.walk(folder_path):
-        files = glob.glob(os.path.join(root,'*.json'))
-        # get absolute path of all files
-        for f in files:
-            all_files.append(os.path.abspath(f))
-    return all_files
-
 def process_song_file(cur,filepath):
     with open(filepath, 'r') as json_file:
         # load a json file (here returns a dict due to scalar values in json)
@@ -32,9 +23,32 @@ def process_song_file(cur,filepath):
         song_data = (str(df['song_id'][1]), str(df['title'][1]), str(df['artist_id'][1]), int(df['year']), float(df['duration']))
         cur.execute(song_table_insert, song_data)
 
-def main():
-    get_path()
+def process_data(cur, conn, filepath, func):
+    # get all files matching extension from directory
+    all_files = []
+    for root, dirs, files in os.walk(filepath):
+        files = glob.glob(os.path.join(root,'*.json'))
+        # get absolute path of all files
+        for f in files :
+            all_files.append(os.path.abspath(f))
 
+    # get total number of files found
+    num_files = len(all_files)
+    print('{} files found in {}'.format(num_files, filepath))
+
+    # iterate over files and process
+    for i, datafile in enumerate(all_files, 1):
+        func(cur, datafile)
+        conn.commit()
+        print('{}/{} files processed.'.format(i, num_files))
+
+def main():
+    conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=postgres password=admin")
+    cur = conn.cursor()
+
+    process_data(cur, conn, filepath='data/song_data', func=process_song_file)
+
+    conn.close()
 
 
 if __name__ == "__main__":
