@@ -32,6 +32,15 @@ def process_log_file(cur, filepath):
         for line in json_file:
             data.append(json.loads(line))
 
+    # Step 2: creating a single dataframe for each line and appending all
+    df = pd.DataFrame()
+    for i in range(len(data)):
+        df_single_row = pd.DataFrame.from_dict(data[i].items())
+        df_single_row = df_single_row.T
+        col = df_single_row.iloc[0]
+        df_single_row.rename(columns=col, inplace=True)
+        df_single_row.drop(index=0, inplace=True)
+        df = df.append(df_single_row, ignore_index=True)
     df =
 
 def process_data(cur, conn, filepath, func):
