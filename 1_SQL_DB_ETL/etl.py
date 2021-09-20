@@ -23,13 +23,13 @@ def process_song_file(cur,filepath):
         df = pd.DataFrame.from_dict(single_json_file.items())
 
         # set columns of df to keys in dict
-        df1 = df.T
-        col = df1.iloc[0]
-        df1.rename(columns=col, inplace=True)
-        df1.drop(index=0, inplace=True)
+        df = df.T
+        col = df.iloc[0]
+        df.rename(columns=col, inplace=True)
+        df.drop(index=0, inplace=True)
 
-        # insert song record TBD
-        song_data =
+        # insert song
+        song_data = (str(df['song_id'][1]), str(df['title'][1]), str(df['artist_id'][1]), int(df['year']), float(df['duration']))
         cur.execute(song_table_insert, song_data)
 
 def main():
