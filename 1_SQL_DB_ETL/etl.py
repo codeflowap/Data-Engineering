@@ -41,7 +41,10 @@ def process_log_file(cur, filepath):
         df_single_row.rename(columns=col, inplace=True)
         df_single_row.drop(index=0, inplace=True)
         df = df.append(df_single_row, ignore_index=True)
-    df =
+
+        # filter by NextSong action
+        mask = 'NextSong'
+        df = df[df['page'] == mask]
 
 def process_data(cur, conn, filepath, func):
     # get all files matching extension from directory
