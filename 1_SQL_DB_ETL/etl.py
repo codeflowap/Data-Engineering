@@ -23,6 +23,17 @@ def process_song_file(cur,filepath):
         song_data = (str(df['song_id'][1]), str(df['title'][1]), str(df['artist_id'][1]), int(df['year']), float(df['duration']))
         cur.execute(song_table_insert, song_data)
 
+def process_log_file(cur, filepath):
+    # open log file (two steps)
+
+    # Step 1: Loading and parsing a JSON file with multiple JSON objects (the case of log files)
+    data = []
+    with open(filepath, 'r') as json_file:
+        for line in json_file:
+            data.append(json.loads(line))
+
+    df =
+
 def process_data(cur, conn, filepath, func):
     # get all files matching extension from directory
     all_files = []
