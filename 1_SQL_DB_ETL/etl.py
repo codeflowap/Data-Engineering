@@ -47,6 +47,20 @@ def process_log_file(cur, filepath):
         mask = 'NextSong'
         df = df[df['page'] == mask]
 
+        # convert timestamp column to datetime - TBD
+        df['datetime'] = df['ts'].map(lambda x: datetime.fromtimestamp(int(str(x)[:-3])))
+
+        # insert time data records
+        time_data =
+        column_labels =
+        time_df =
+
+        for i, row in time_df.iterrows():
+            cur.execute(time_table_insert, list(row))
+
+
+
+
 def process_data(cur, conn, filepath, func):
     # get all files matching extension from directory
     all_files = []
