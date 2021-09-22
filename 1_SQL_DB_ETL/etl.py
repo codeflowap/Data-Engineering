@@ -43,36 +43,34 @@ def process_log_file(cur, filepath):
         df_single_row.drop(index=0, inplace=True)
         df = df.append(df_single_row, ignore_index=True)
 
-        # filter by NextSong action
-        mask = 'NextSong'
-        df = df[df['page'] == mask]
+    # filter by NextSong action
+    mask = 'NextSong'
+    df = df[df['page'] == mask]
 
-        # convert timestamp column to datetime
-        df['datetime'] = df['ts'].map(lambda x: datetime.fromtimestamp(int(str(x)[:-3])))
+    # convert timestamp column to datetime
+    df['datetime'] = df['ts'].map(lambda x: datetime.fromtimestamp(int(str(x)[:-3])))
 
-        # extract the correct format of datetime
-        df['datetime_str'] = df['datetime'].map(lambda x: str(x))
-        df['datetime_str_year_red'] = df['datetime_str'].map(lambda x: x[2:])
-        df['time'] = df['datetime_str_year_red'].map(lambda x: datetime.strptime(x, "%y-%m-%j %H:%M:%S"))
+    # extract the correct format of datetime
+    df['datetime_str'] = df['datetime'].map(lambda x: str(x))
+    df['datetime_str_year_red'] = df['datetime_str'].map(lambda x: x[2:])
+    df['time'] = df['datetime_str_year_red'].map(lambda x: datetime.strptime(x, "%y-%m-%j %H:%M:%S"))
 
-        # extract data for time_df
-        df['hour'] = df['time'].map(lambda x: x.hour)
-        df['day'] = df['time'].map(lambda x: x.day)
-        df['date'] = df['time'].map(lambda x: x.date())
-        df['week'] = df['date'].map(lambda x: x.isocalendar()[1])
-        df['month'] = df['time'].map(lambda x: x.month)
-        df['year'] = df['time'].map(lambda x: x.year)
-        df['weekday'] = df['time'].map(lambda x: x.weekday())
+    # extract data for time_df
+    df['hour'] = df['time'].map(lambda x: x.hour)
+    df['day'] = df['time'].map(lambda x: x.day)
+    df['date'] = df['time'].map(lambda x: x.date())
+    df['week'] = df['date'].map(lambda x: x.isocalendar()[1])
+    df['month'] = df['time'].map(lambda x: x.month)
+    df['year'] = df['time'].map(lambda x: x.year)
+    df['weekday'] = df['time'].map(lambda x: x.weekday())
 
-        print('data inserted into dataframe')
+    print('data inserted into dataframe')
 
-        # insert time data records
-        time_df = df[['time', 'hour', 'day', 'week', 'year', 'weekday']]
+    # insert time data records
+    time_df = df[['time', 'hour', 'day', 'week', 'month', 'year', 'weekday']]
 
-        for i, row in time_df.iterrows():
-            cur.execute(time_table_insert, list(row))
-
-        # test
+    for i, row in time_df.iterrows():
+        cur.execute(time_table_insert, list(row))
 
 
 def process_data(cur, conn, filepath, func):
@@ -81,7 +79,7 @@ def process_data(cur, conn, filepath, func):
     for root, dirs, files in os.walk(filepath):
         files = glob.glob(os.path.join(root,'*.json'))
         # get absolute path of all files
-        for f in files :
+        for f in files:
             all_files.append(os.path.abspath(f))
 
     # get total number of files found
@@ -98,7 +96,7 @@ def main():
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=postgres password=admin")
     cur = conn.cursor()
 
-    process_data(cur, conn, filepath='data/song_data', func=process_song_file)
+    # process_data(cur, conn, filepath='data/song_data', func=process_song_file)
     process_data(cur, conn, filepath='data/log_data', func=process_log_file)
 
     conn.close()
