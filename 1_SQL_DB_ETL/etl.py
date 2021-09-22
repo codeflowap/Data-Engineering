@@ -47,7 +47,7 @@ def process_log_file(cur, filepath):
         mask = 'NextSong'
         df = df[df['page'] == mask]
 
-        # convert timestamp column to datetime - TBD
+        # convert timestamp column to datetime
         df['datetime'] = df['ts'].map(lambda x: datetime.fromtimestamp(int(str(x)[:-3])))
 
         # insert time data records
