@@ -32,3 +32,6 @@ song_table_insert = (""" INSERT INTO songs (song_id, title, artist_id, year, dur
 
 time_table_insert = (""" INSERT INTO times (start_time, hour, day, week, month, year, weekday)
                         VALUES (%s, %s, %s, %s, %s, %s, %s) """)
+
+user_table_insert = (""" INSERT INTO users (user_id, first_name, last_name, gender, level)
+                        VALUES (%s, %s, %s, %s, %s) """)

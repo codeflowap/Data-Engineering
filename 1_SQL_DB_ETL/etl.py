@@ -43,34 +43,60 @@ def process_log_file(cur, filepath):
         df_single_row.drop(index=0, inplace=True)
         df = df.append(df_single_row, ignore_index=True)
 
+
+    # INSERT data from dataframe to tables: 1- times 2- users
+
+    # (I) INSERT data to "times" table
     # filter by NextSong action
     mask = 'NextSong'
-    df = df[df['page'] == mask]
+    time_df = df[df['page'] == mask]
 
     # convert timestamp column to datetime
-    df['datetime'] = df['ts'].map(lambda x: datetime.fromtimestamp(int(str(x)[:-3])))
+    time_df['datetime'] = time_df['ts'].map(lambda x: datetime.fromtimestamp(int(str(x)[:-3])))
 
     # extract the correct format of datetime
-    df['datetime_str'] = df['datetime'].map(lambda x: str(x))
-    df['datetime_str_year_red'] = df['datetime_str'].map(lambda x: x[2:])
-    df['time'] = df['datetime_str_year_red'].map(lambda x: datetime.strptime(x, "%y-%m-%j %H:%M:%S"))
+    time_df['datetime_str'] = time_df['datetime'].map(lambda x: str(x))
+    time_df['datetime_str_year_red'] = time_df['datetime_str'].map(lambda x: x[2:])
+    time_df['time'] = time_df['datetime_str_year_red'].map(lambda x: datetime.strptime(x, "%y-%m-%j %H:%M:%S"))
 
     # extract data for time_df
-    df['hour'] = df['time'].map(lambda x: x.hour)
-    df['day'] = df['time'].map(lambda x: x.day)
-    df['date'] = df['time'].map(lambda x: x.date())
-    df['week'] = df['date'].map(lambda x: x.isocalendar()[1])
-    df['month'] = df['time'].map(lambda x: x.month)
-    df['year'] = df['time'].map(lambda x: x.year)
-    df['weekday'] = df['time'].map(lambda x: x.weekday())
+    time_df['hour'] = time_df['time'].map(lambda x: x.hour)
+    time_df['day'] = time_df['time'].map(lambda x: x.day)
+    time_df['date'] = time_df['time'].map(lambda x: x.date())
+    time_df['week'] = time_df['date'].map(lambda x: x.isocalendar()[1])
+    time_df['month'] = time_df['time'].map(lambda x: x.month)
+    time_df['year'] = time_df['time'].map(lambda x: x.year)
+    time_df['weekday'] = time_df['time'].map(lambda x: x.weekday())
 
     print('data inserted into dataframe')
 
     # insert time data records
-    time_df = df[['time', 'hour', 'day', 'week', 'month', 'year', 'weekday']]
+    time_df = time_df[['time', 'hour', 'day', 'week', 'month', 'year', 'weekday']]
 
     for i, row in time_df.iterrows():
         cur.execute(time_table_insert, list(row))
+
+
+
+
+    # (I) INSERT data to "users" table
+    user_df = pd.DataFrame()
+
+    # fill empty cells in userId with 0 to resolve the error:
+    # ValueError: invalid literal for int() with base 10: ''
+    def fill_empty_userId(x):
+        if x == '':
+            return 0
+        else:
+            return int(x)
+
+    user_df['user_id'] = df['userId'].apply(fill_empty_userId)
+    user_df['first_name'] = df['firstName']
+    user_df['last_name'] = df['lastName']
+    user_df['level'] = df['level']
+    user_df['gender'] = df['gender']
+    for i, row in user_df.iterrows():
+        cur.execute(user_table_insert, list(row))
 
 
 def process_data(cur, conn, filepath, func):
@@ -88,6 +114,7 @@ def process_data(cur, conn, filepath, func):
 
     # iterate over files and process
     for i, datafile in enumerate(all_files, 1):
+        print(datafile)
         func(cur, datafile)
         conn.commit()
         print('{}/{} files processed.'.format(i, num_files))
