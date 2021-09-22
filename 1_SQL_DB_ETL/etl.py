@@ -98,7 +98,6 @@ def process_log_file(cur, filepath):
     for i, row in user_df.iterrows():
         cur.execute(user_table_insert, list(row))
 
-
 def process_data(cur, conn, filepath, func):
     # get all files matching extension from directory
     all_files = []
