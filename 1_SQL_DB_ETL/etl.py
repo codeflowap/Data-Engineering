@@ -53,6 +53,16 @@ def process_log_file(cur, filepath):
         # extract the correct format of datetime
         df['datetime_str'] = df['datetime'].map(lambda x: str(x))
         df['datetime_str_year_red'] = df['datetime_str'].map(lambda x: x[2:])
+        df['time'] = df['datetime_str_year_red'].map(lambda x: datetime.strptime(x, "%y-%m-%j %H:%M:%S"))
+
+        # extract data for time_df
+        df['hour'] = df['time'].map(lambda x: x.hour)
+        df['day'] = df['time'].map(lambda x: x.day)
+        df['date'] = df['time'].map(lambda x: x.date())
+        df['week'] = df['date'].map(lambda x: x.isocalendar()[1])
+        df['month'] = df['time'].map(lambda x: x.month)
+        df['year'] = df['time'].map(lambda x: x.year)
+        df['weekday'] = df['time'].map(lambda x: x.weekday())
 
         # insert time data records
         time_data =
