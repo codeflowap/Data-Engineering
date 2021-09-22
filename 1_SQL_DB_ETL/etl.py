@@ -50,6 +50,10 @@ def process_log_file(cur, filepath):
         # convert timestamp column to datetime
         df['datetime'] = df['ts'].map(lambda x: datetime.fromtimestamp(int(str(x)[:-3])))
 
+        # extract the correct format of datetime
+        df['datetime_str'] = df['datetime'].map(lambda x: str(x))
+        df['datetime_str_year_red'] = df['datetime_str'].map(lambda x: x[2:])
+
         # insert time data records
         time_data =
         column_labels =
