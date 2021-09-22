@@ -64,10 +64,10 @@ def process_log_file(cur, filepath):
         df['year'] = df['time'].map(lambda x: x.year)
         df['weekday'] = df['time'].map(lambda x: x.weekday())
 
+        print('data inserted into dataframe')
+
         # insert time data records
-        time_data =
-        column_labels =
-        time_df =
+        time_df = df[['time', 'hour', 'day', 'week', 'year', 'weekday']]
 
         for i, row in time_df.iterrows():
             cur.execute(time_table_insert, list(row))
@@ -99,6 +99,7 @@ def main():
     cur = conn.cursor()
 
     process_data(cur, conn, filepath='data/song_data', func=process_song_file)
+    process_data(cur, conn, filepath='data/log_data', func=process_log_file)
 
     conn.close()
 
