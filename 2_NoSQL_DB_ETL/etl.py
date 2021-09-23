@@ -8,6 +8,7 @@ import numpy as np
 import json
 import csv
 import psycopg2
+from sql_queries import *
 
 import sql_queries
 
@@ -81,19 +82,10 @@ def process_data(cur, conn, filepath='event_datafile_new.csv'):
 
         # extracting each data row one by one and store into database
         for row in csvreader:
-            if (row[0] == ''):
+            if row[0] == '':
                 continue
-            cur.execute(songtable_table_insert,(row[0], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[12], row[13], row[16]))
-
-
-
-
-
-
-
-
-
-
+            cur.execute(songtable_table_insert, (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]))
+        conn.commit()
 
 def main():
     conn = psycopg2.connect("host=127.0.0.1 dbname=csvtodb user=postgres password=admin")
@@ -104,6 +96,9 @@ def main():
     file_path_list = get_file_paths(data_directory='/event_data')
     full_data_rows_list = get_full_data(file_path_list)
     create_csv_from_list(full_data_rows_list)
+
+    # store data from csv to database
+    process_data(cur, conn, filepath='event_datafile_new.csv')
 
 
 
