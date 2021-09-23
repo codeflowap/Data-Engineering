@@ -24,3 +24,27 @@ def create_database():
     cur = conn.cursor()
 
     return cur, conn
+
+
+def main():
+    """
+    - Drops (if exists) and Creates the csvtodb database.
+
+    - Establishes connection with the csvtodb database and gets
+    cursor to it.
+
+    - Drops all the tables.
+
+    - Creates all tables needed.
+
+    - Finally, closes the connection.
+    """
+    cur, conn = create_database()
+
+    # drop_tables(cur, conn)
+    # create_tables(cur, conn)
+
+    conn.close()
+
+if __name__ == "__main__":
+    main()
