@@ -9,7 +9,3 @@ import json
 import csv
 
 import sql_queries
-
-
-
-
