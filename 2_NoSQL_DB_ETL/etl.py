@@ -9,3 +9,17 @@ import json
 import csv
 
 import sql_queries
+
+
+
+
+
+def main():
+    conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=postgres password=admin")
+    cur = conn.cursor()
+
+
+
+    conn.close()
+
+
