@@ -70,9 +70,24 @@ def create_csv_from_list(data_list):
     with open('event_datafile_new.csv', 'r', encoding = 'utf8') as f:
         print('SUCCESS: csv from data list created. Total lines = ', sum(1 for line in f))
 
-def process_data():
+def process_data(cur, conn, filepath='event_datafile_new.csv'):
+    """
+    stores a csv into postgres database
+    """
+    with open(filepath, 'r', encoding='utf8', newline='') as csvfile:
+        # creating a csv reader object
+        csvreader = csv.reader(csvfile)
+        next(csvreader)  # skip the header
 
-    """ stores a csv into postgres database"""
+        # extracting each data row one by one and store into database
+        for row in csvreader:
+            if (row[0] == ''):
+                continue
+            cur.execute(songtable_table_insert,(row[0], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[12], row[13], row[16]))
+
+
+
+
 
 
 
