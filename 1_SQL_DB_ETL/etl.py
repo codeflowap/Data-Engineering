@@ -76,9 +76,6 @@ def process_log_file(cur, filepath):
     for i, row in time_df.iterrows():
         cur.execute(time_table_insert, list(row))
 
-
-
-
     # (I) INSERT data to "users" table
     user_df = pd.DataFrame()
 
