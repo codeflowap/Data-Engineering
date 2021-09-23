@@ -78,6 +78,8 @@ def process_data():
 
 
 
+
+
 def main():
     conn = psycopg2.connect("host=127.0.0.1 dbname=csvtodb user=postgres password=admin")
     cur = conn.cursor()
