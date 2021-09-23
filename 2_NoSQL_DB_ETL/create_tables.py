@@ -1,5 +1,5 @@
 import psycopg2
-from sql_queries import songplay_table_create, drop_table_queries
+from sql_queries import create_table_queries, drop_table_queries
 
 def create_database():
     """
@@ -33,7 +33,13 @@ def drop_tables(cur, conn):
         cur.execute(query)
         conn.commit()
 
-
+def create_tables(cur, conn):
+    """
+    Creates each table using the queries in `create_table_queries` list.
+    """
+    for query in create_table_queries:
+        cur.execute(query)
+        conn.commit()
 
 def main():
     """
@@ -51,7 +57,7 @@ def main():
     cur, conn = create_database()
 
     # drop_tables(cur, conn)
-    # create_tables(cur, conn)
+    create_tables(cur, conn)
 
     conn.close()
 
