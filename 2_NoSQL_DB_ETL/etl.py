@@ -100,9 +100,6 @@ def main():
     # store data from csv to database
     process_data(cur, conn, filepath='event_datafile_new.csv')
 
-
-
-
     conn.close()
 
 
