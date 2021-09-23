@@ -1,5 +1,5 @@
 import psycopg2
-from sql_queries import songplay_table_create
+from sql_queries import songplay_table_create, drop_table_queries
 
 def create_database():
     """
@@ -32,6 +32,8 @@ def drop_tables(cur, conn):
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
+
+
 
 def main():
     """
