@@ -24,15 +24,39 @@ def get_file_pathes():
     for root, dirs, files in os.walk(filepath):
         # join the file path and roots with the subdirectories using glob
         file_path_list = glob.glob(os.path.join(root, '*.csv'))
-        print(file_path_list)
+    print('get_file_pathes SUCCESS')
+    return file_path_list
 
+def get_full_data(file_path_list):
 
+    """ Processing the files to create the data file csv from rows of single
+        csv files """
+
+    # initiating an empty list of rows that will be generated from each file
+    full_data_rows_list = []
+
+    # for every filepath in the file path list
+    for f in file_path_list:
+
+        # reading csv file
+        with open(f, 'r', encoding='utf8', newline='') as csvfile:
+            # creating a csv reader object
+            csvreader = csv.reader(csvfile)
+            next(csvreader) # skip the header
+
+            # extracting each data row one by one and append it
+            for line in csvreader:
+                # print(line)
+                full_data_rows_list.append(line)
+    print(full_data_rows_list[0])
 
 def main():
     conn = psycopg2.connect("host=127.0.0.1 dbname=csvtodb user=postgres password=admin")
     cur = conn.cursor()
 
-    get_file_pathes()
+    file_path_list = get_file_pathes()
+    get_full_data(file_path_list)
+
 
     conn.close()
 
